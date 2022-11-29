@@ -63,10 +63,25 @@ export const UploadFileBtn = styled.button`
 
 `;
 
-export const Progress = styled.progress`
-  background-Color: red;
-  margin: 50px 5px;
+export const Progress = styled.div`
+  width: 200px;
+  margin: 0px 0px 10px;
+  progress {
+    opacity : 0px;
+  }
+  p {
+    position: relative;
+  }
+  div {
+    position: relative;
+    height: 20px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
 `;
+
+
+ 
 
 export const FilePreviewContainer = styled.article`
   margin-bottom: 35px;
@@ -90,10 +105,44 @@ export const PreviewList = styled.section`
 `;
 
 export const PreviewContainer = styled.section`
-  padding: 0.25rem;
-  border-radius: 6px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  position:relative;
+  padding:0px;
+  margin : 10px;
   box-sizing: border-box;
+  height:300px;
+  width:300px;
+  overflow:hidden;
+  border: 2px solid #3498db; 
+  border-radius: 6px;
   iframe {
+    width:100%;
+    height:100%;
+  }
+  button {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    z-index:10;
+    box-sizing: border-box;
+    background-color: transparent;
+    border: 2px solid #3498db;
+    cursor: pointer;
+    font-size: 0.8rem;
+    line-height: 1;
+    padding: 1.1em 2.8em;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
     border-radius: 6px;
+    color: #3498db;
+    transition:all ease 0.3s;
+    &:hover {
+      color:#fff;
+      background-color:#3498db;
+    }
   }
 `;
