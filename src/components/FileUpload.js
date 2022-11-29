@@ -7,16 +7,13 @@ import {
   DragDropText,
   UploadFileBtn,
   FilePreviewContainer,
-  Progress,
   PreviewContainer,
+  Progress,
   PreviewList,
-  FileMetaData,
 } from "./style.js";
 
-const KILO_BYTES_PER_BYTE = 1000;
-const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 500000;
+const DEFAULT_MAX_FILE_SIZE_IN_BYTES = 5000000;
 
-const convertBytesToKB = (bytes) => Math.round(bytes / KILO_BYTES_PER_BYTE);
 const FileUpload = ({
   maxFileSizeInBytes = DEFAULT_MAX_FILE_SIZE_IN_BYTES,
   ...otherProps
@@ -27,7 +24,6 @@ const FileUpload = ({
 
   const handleUploadBtnClick = () => {
     fileInputField.current.click();
-    setProgress(0)
   };
 
   const addNewFiles = (newFiles) => {
@@ -40,6 +36,7 @@ const FileUpload = ({
       }
     }
     return { ...files };
+
   };
 
 
@@ -49,20 +46,18 @@ const FileUpload = ({
       let updatedFiles = addNewFiles(newFiles);
       setFiles(updatedFiles);
     }
-    setProgress(100)
+    setProgress(100);
   };
 
-    const downloadHandler = (file) => {
-        fetch(file).then(() => {
-                // Creating new object of PDF file
-                const fileURL = window.URL.createObjectURL(file);
-                // Setting various property values
-                let alink = document.createElement('a');
-                alink.href = fileURL;
-                alink.download = file.name;
-                alink.click();
+  const downloadHandler = (file) => {
+      fetch(file).then(() => {
+            const fileURL = window.URL.createObjectURL(file);
+            let alink = document.createElement('a');
+            alink.href = fileURL;
+            alink.download = file.name;
+            alink.click();
         })
-    }
+  }
 
   return (
     <Div>
@@ -80,17 +75,22 @@ const FileUpload = ({
           {...otherProps}
         />
       </FileUploadContainer>
-      <Progress value={progress} max="100">{progress}</Progress>
+      <Progress progress={progress}>
+        <p>Status : {progress}%</p>
+        <div>
+          <progress max="100" value={progress}>{progress}</progress>
+        </div>
+      </Progress>
       <FilePreviewContainer>
         <p>Uploaded Files : </p>
         <PreviewList>
           {Object.keys(files).map((fileName, index) => {
             let file = files[fileName];
             return (
-              <PreviewContainer key={fileName}>
-                <div onClick={() => downloadHandler(file)}>
-                    <iframe src={URL.createObjectURL(file)} height="300" width="300"></iframe>
-                </div>
+              <PreviewContainer key={fileName} onClick={()=> downloadHandler(file)}>
+                <iframe src={URL.createObjectURL(file)} title={file.name}></iframe>
+                <button>Download</button>
+                <p>name: {file.name}<br/>size: {file.size}B<br/>type: {file.type}</p>
               </PreviewContainer>
             );
           })}
